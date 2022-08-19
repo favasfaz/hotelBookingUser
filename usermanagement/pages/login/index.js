@@ -1,10 +1,9 @@
-import { getSession } from "next-auth/react";
+import { getSession,providers } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import Login from "../../components/Login/Login";
 import Signup from "../../components/SignUP/Signup";
 function index() {
   const [state, setState] = useState(true);
-
   return (
     <div>
       {state ? (

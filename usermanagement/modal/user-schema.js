@@ -1,6 +1,10 @@
 import mongoose, { Schema } from "mongoose";
 
 const userSchema = mongoose.Schema({
+  verified: {
+    type:Boolean,
+    default:false,
+  },
   name: {
     type: String,
     required: true,
@@ -17,6 +21,7 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  
 });
 
 const user = mongoose.models.user || mongoose.model("user", userSchema);

@@ -10,6 +10,19 @@ export const userRegister = async (data) => {
   });
 };
 
+// User verified
+export const userVerification = async (data) =>{
+  console.log('log apiindex');
+  console.log(data,'api index data');
+  return await axios({
+    url: "/api/userhandle",
+    method: "post",
+    data: {
+      type: "register",
+      data: data,
+    },
+  });}
+
 //user Login
 export const userLogin = async (data) => {
   return await axios({
@@ -25,12 +38,25 @@ export const userLogin = async (data) => {
 //sending OTP
 
 export const sendOtp = async(phone) =>{
-  await axios.get(`/api/userhandle/otp?otp=${phone}`)
+  return await axios.get(`/api/userhandle/otp?otp=${phone}`)
 }
 
 //OTP verification
-export const otpVerification = async(otp,phone)=>{
-  let data = {otp,phone}
+export const otpVerification = async(phone,otp)=>{
+  let data = {phone,otp}
   console.log(data,'datafrom index');
-await axios.post('/api/userhandle/otp',data)
+return await axios.post('/api/userhandle/otp',data)
+}
+
+export const resetPassword = async (phone,password) =>{
+console.log('reset function working');
+let data = {phone,password}
+return await axios({
+  url: "/api/userhandle",
+  method: "post",
+  data: {
+    type: "resetPassword",
+    data: data,
+  },
+});
 }

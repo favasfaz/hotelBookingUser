@@ -1,15 +1,17 @@
 import { Button, Link, TextField, Typography } from "@mui/material";
 import React from "react";
 import { Formik } from "formik";
-import * as Yup from "yup";
 import { Box } from "@mui/system";
 import PasswordStrengthBar from "react-password-strength-bar";
-import { userRegister } from "../../APIs/Index";
+import { sendOtp, userRegister } from "../../APIs/Index";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import AuthConstant from "../../Constants/AuthConstant";
 import { setCookie } from "cookies-next";
 import Loding from "../Loader/Loading";
+import RightSection from "../../Constants/RightSection";
+import {userValidation} from '../../formValidation/SignupValidation'
+import OtpConstant from "../../Constants/OtpConstant";
 
 
 function Copyright(props) {
@@ -27,21 +29,37 @@ function Copyright(props) {
   );
 }
 
-function Signup({ state, setState }) {
+function Signup({ setState }) {
   const [error, setError] = useState("");
+  const [open,setOpen] = useState(false)
   const [loader,setLoader] = useState(false)
+  const [phone,setPhone] = useState('')
   const router = useRouter();
+console.log(phone,'phone');
+
+  // const otpFunction =async (values) =>{
+  //   setDetails(values)
+  //   await sendOtp(values.phone)
+  //   setDetails(values)
+  //   setOpen(true)
+  // }
+
   const handleSubmit = async (e, values) => {
     e.preventDefault();
     try {
       setLoader(true)
+      setPhone(values.phone)
       const res = await userRegister(values);
-      const Token = res.data;
-      setCookie("userToken", Token);
-      if (Token) {
-        setLoader(false)
-        router.push("/");
+      if(res){
+        console.log(res,'response before verification');
+        await sendOtp(values.phone)
+        setOpen(true)
       }
+      // const Token = res.data;
+      // if (Token) {
+      //   setLoader(false)
+      //   router.push("/");
+      // }
     } catch (error) {
       if (error) {
         setLoader(false)
@@ -50,9 +68,7 @@ function Signup({ state, setState }) {
     }
   };
 
-  const phoneRegExp =
-    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-
+  
   return (
     <div className="flex flex-col items-center justify-center w-full flex-1   xl:px-20 text-center ">
       <div className="bg-white mt-28 rounded-2xl shadow-2xl flex md:w-2/3 max-w-4xl">
@@ -69,24 +85,7 @@ function Signup({ state, setState }) {
                 phone: "",
                 confirmPassword: "",
               }}
-              validationSchema={Yup.object().shape({
-                name: Yup.string().required("Name is required").max(255),
-                email: Yup.string()
-                  .email("Email must be valid")
-                  .required("Email is required")
-                  .max(255),
-                password: Yup.string()
-                  .required("Password is required")
-                  .max(255)
-                  .min(6),
-                phone: Yup.string()
-                  .matches(phoneRegExp, "Phone number is not valid")
-                  .max(10)
-                  .min(10),
-                confirmPassword: Yup.string()
-                  .required("Password is required")
-                  .oneOf([Yup.ref("password"), null], "Passwords must match"),
-              })}
+              validationSchema={userValidation}
             >
               {({ handleChange, values, errors, touched, handleBlur }) => (
                 <Box
@@ -190,20 +189,9 @@ function Signup({ state, setState }) {
           </div>
           <Copyright sx={{ mt: 15 }} />
         </div>
-        <div className='w-2/5 bg-[url("../public/zayn.jpeg")] text-white rounded-tr-2xl rounded-br-2xl py-44 px-12'>
-          <h2 className="text-3xl font-bold mb-2">Hello friends</h2>
-          <div className=" border-2 w-10 border-white inline-block mb-2"></div>
-          <p className="mb-10">
-            Fill up personal information and start journey with us
-          </p>
-          <button
-            onClick={() => setState(true)}
-            className="border-2  border-white rounded-full px-12 py-2 inline-block hover:bg-white hover:text-green-500 font-semibold"
-          >
-            Sign In
-          </button>
-        </div>
+      <RightSection setState={setState}/>
       </div>
+      <OtpConstant open={open} setOpen={setOpen} phone={phone}/>
     </div>
   );
 }
