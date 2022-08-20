@@ -13,9 +13,9 @@ function LandingPage() {
       {/* banner */}
       <Navbar />
       {/* OfferSection */}
-      <OfferSection />
+      {/* <OfferSection /> */}
       {/* PropertyType                  make this component reusable */}
-      <PropertyType />               
+      {/* <PropertyType /> */}
       {/* PopularIndianDestination */}
 
       {/* Footer */}

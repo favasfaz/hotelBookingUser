@@ -5,7 +5,7 @@ import { ThreeDots } from  'react-loader-spinner'
 
 function Loading() {
   return (
-    <div>
+    <div className='flex justify-center items-center'>
       <ThreeDots height='24' color = 'green' width="50"  />
     </div>
   )

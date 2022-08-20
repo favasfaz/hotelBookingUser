@@ -24,7 +24,6 @@
 // import { ToastContainer, toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 
-
 // function Copyright(props) {
 //   return (
 //     <Typography
@@ -109,15 +108,15 @@
 //               </div>
 //             )}
 //             {forgotPassword ? (
-//               <h2 className="text-3xl mt-20 font-bold text-green-500">
+//               <h2 className="text-3xl mt-20 font-bold text-blue-900">
 //                 Forgot Password
 //               </h2>
 //             ) : (
-//               <h2 className="text-3xl mt-20 font-bold text-green-500">
+//               <h2 className="text-3xl mt-20 font-bold text-blue-900">
 //                 Sign in to Account
 //               </h2>
 //             )}
-//             <div className=" border-2 w-10 border-green-500 mt-3 inline-block mb-2"></div>
+//             <div className=" border-2 w-10 border-blue-900 mt-3 inline-block mb-2"></div>
 
 //             {!forgotPassword ? (
 //               <div
@@ -190,7 +189,7 @@
 //                   type="submit"
 //                   disabled={!isValid || loader}
 //                   onClick={handleSubmit}
-//                   className="border-2 mt-6 text-gray-500 border-green-500 rounded-full px-5 py-2 inline-block hover:bg-white hover:text-green-500 font-semibold"
+//                   className="border-2 mt-6 text-gray-500 border-blue-900 rounded-full px-5 py-2 inline-block hover:bg-white hover:text-blue-900 font-semibold"
 //                 >
 //                   {loader ? <Loding /> : "Sign In"}
 //                 </button>
@@ -209,8 +208,6 @@
 // }
 
 // export default Login;
-
-
 
 import {
   FormControl,
@@ -235,8 +232,9 @@ import { setCookie } from "cookies-next";
 import RightSection from "../../Constants/RightSection";
 import { useSelector, useDispatch } from "react-redux";
 import { LoginUser } from "../../Redux/AuthSlice";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useForm } from "react-hook-form";
 
 
 function Copyright(props) {
@@ -257,6 +255,23 @@ function Copyright(props) {
 function Login({ state, setState }) {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users);
+  const { register, handleSubmit } = useForm();
+  const onSubmit =async(d) => {
+      setLoader(true);
+    const password = values.password;
+    const email = d.email
+    const data = { email, password };
+    console.log(data,'data');
+    await dispatch(LoginUser(data));
+    setLoader(false);
+    if (users.error == "" && users.user.token) {
+      toast("logined successfully");
+      setCookie("cookieToken", users.user.token);
+      router.push("/");
+    } else {
+      toast(users.error);
+    }
+  };
 
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -269,10 +284,8 @@ function Login({ state, setState }) {
   });
   const [email, setEmail] = useState("");
   const isValid =
-    email != null &&
-    email.trim().length > 0 &&
     values.password != null &&
-    values.password.trim().length > 4;
+    values.password.trim().length > 5;
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -289,33 +302,33 @@ function Login({ state, setState }) {
     event.preventDefault();
   };
 
-  const handleSubmit = async () => {
-    setLoader(true);
-    const password = values.password;
-    const data = { email, password };
-    await dispatch(LoginUser(data));
-    setLoader(false);
-    if (users.error == "" && users.user.token) {
-      toast("logined successfully")
-      setCookie('token',users.user.token);
-    router.push("/");
-    }else{
-      toast(users.error)
-    }
-  };
+  // const handleSubmit = async () => {
+  //   setLoader(true);
+  //   const password = values.password;
+  //   const data = { email, password };
+  //   await dispatch(LoginUser(data));
+  //   setLoader(false);
+  //   if (users.error == "" && users.user.token) {
+  //     toast("logined successfully");
+  //     setCookie("token", users.user.token);
+  //     router.push("/");
+  //   } else {
+  //     toast(users.error);
+  //   }
+  // };
 
   const handleForgot = () => {
     setLoading(true);
-     setTimeout(()=>{
+    setTimeout(() => {
       setForgotPassword(true);
       setLoading(false);
-     },2000)
+    }, 2000);
   };
 
   return (
     <div className="flex flex-col items-center justify-center w-full flex-1   xl:px-20 text-center ">
       <div className="bg-white mt-28 rounded-2xl shadow-2xl flex md:w-2/3 max-w-4xl">
-        <div className="w-3/5 m-8">
+        <div className="sm:w-3/5 w-5/5 m-8">
           <div className="py-10">
             {loading && (
               <div className="flex items-center justify-center">
@@ -323,15 +336,15 @@ function Login({ state, setState }) {
               </div>
             )}
             {forgotPassword ? (
-              <h2 className="text-3xl mt-20 font-bold text-green-500">
+              <h2 className="text-3xl mt-20 font-bold text-blue-900">
                 Forgot Password
               </h2>
             ) : (
-              <h2 className="text-3xl mt-20 font-bold text-green-500">
+              <h2 className="text-3xl mt-20 font-bold text-blue-900">
                 Sign in to Account
               </h2>
             )}
-            <div className=" border-2 w-10 border-green-500 mt-3 inline-block mb-2"></div>
+            <div className=" border-2 w-10 border-blue-900 mt-3 inline-block mb-2"></div>
 
             {!forgotPassword ? (
               <div
@@ -346,16 +359,15 @@ function Login({ state, setState }) {
                 ) : (
                   <h6 className="text-red-500">{validationError}</h6>
                 )}
-                <ToastContainer  position="top-center" />
-                <FormControl sx={{ m: 1, width: "25ch" }} variant="standard">
-                  <InputLabel htmlFor="standard-adornment-password">
+                   <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col'>
+                   <FormControl sx={{ m: 1, width: "25ch" }} variant="standard">
+               <InputLabel htmlFor="standard-adornment-password">
                     Email
                   </InputLabel>
-                  <Input
+                 <Input
                     required
                     type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    {...register("email", { required: true, maxLength: 20 })}
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton aria-label="toggle password visibility">
@@ -393,7 +405,6 @@ function Login({ state, setState }) {
                     }
                   />
                 </FormControl>
-
                 <p
                   className="text-red-600 md:ml-28 mt-2 cursor-pointer "
                   onClick={handleForgot}
@@ -403,11 +414,12 @@ function Login({ state, setState }) {
                 <button
                   type="submit"
                   disabled={!isValid || loader}
-                  onClick={handleSubmit}
-                  className="border-2 mt-6 text-gray-500 border-green-500 rounded-full px-5 py-2 inline-block hover:bg-white hover:text-green-500 font-semibold"
+                  // onClick={handleSubmit}
+                  className="border-2 mt-6 sm:w-30 w-none text-gray-500 border-blue-900 rounded-full px-5 py-2 inline-block hover:bg-white hover:text-blue-900 font-semibold"
                 >
                   {loader ? <Loding /> : "Sign In"}
                 </button>
+                </form>
               </div>
             ) : (
               <ForgotPassword setForgotPassword={setForgotPassword} />

@@ -13,7 +13,7 @@ import { signIn } from "next-auth/react";
 function AuthConstant() {
   return (
     <div className="flex flex-col mt-6 justify-center  items-center">
-    <Paper  elevation={6}>
+    {/* <Paper  elevation={6}>
     <div >
         <ListItemButton onClick={() => signIn()} className="cursor-pointer">
           <ListItemIcon>
@@ -24,7 +24,7 @@ function AuthConstant() {
           <ListItemText primary="Sign In with GitHub" />
         </ListItemButton>
       </div>
-    </Paper>
+    </Paper> */}
     <Paper className="mt-2" elevation={6}>
       <div >
         <ListItemButton onClick={() => signIn()} className="cursor-pointer">

@@ -53,6 +53,7 @@ console.log(phone,'phone');
       if(res){
         console.log(res,'response before verification');
         await sendOtp(values.phone)
+        setLoader(false)
         setOpen(true)
       }
       // const Token = res.data;
@@ -72,10 +73,10 @@ console.log(phone,'phone');
   return (
     <div className="flex flex-col items-center justify-center w-full flex-1   xl:px-20 text-center ">
       <div className="bg-white mt-28 rounded-2xl shadow-2xl flex md:w-2/3 max-w-4xl">
-        <div className="w-3/5 m-8">
+        <div className="w-5/5 sm:w-3/5 m-8">
           <div>
-            <h2 className="text-3xl mt-20 font-bold text-green-500">Sign Up</h2>
-            <div className=" border-2 w-10 border-green-500 mt-3 inline-block mb-2"></div>
+            <h2 className="text-3xl mt-20 font-bold text-blue-900">Sign Up</h2>
+            <div className=" border-2 w-10 border-blue-900 mt-3 inline-block mb-2"></div>
 
             <Formik
               initialValues={{

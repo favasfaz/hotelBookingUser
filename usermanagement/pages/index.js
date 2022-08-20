@@ -2,21 +2,22 @@ import { getSession } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
-import { deleteCookie,getCookie } from "cookies-next";
+import { deleteCookie, getCookie } from "cookies-next";
 import LandingPage from "../components/LandingPage/LandingPage";
 import SearchSection from "../components/FilterComponent/SearchSection/SearchSection";
 import FilterComponent from "../components/FilterComponent/FilterComponent";
 import SingleResultPage from "../components/SingleResultPage/SingleResultPage";
-import { useSession } from "next-auth/react"
+import { useSession } from "next-auth/react";
+import cookies from 'next-cookies'
 
 
 export default function Home() {
-  const { data: session } = useSession()
-console.log({session});
+  const { data: session } = useSession();
+  console.log(session?.user?.name);
   const handleLogout = () => {
     signOut();
     deleteCookie("next-auth.session-token");
-    deleteCookie("userToken")
+    deleteCookie("userToken");
   };
   return (
     <div>
@@ -27,25 +28,26 @@ console.log({session});
       </Head>
       {/* <h1>ITS HOME</h1>
       <button onClick={handleLogout}>logout</button> */}
-      {/* <LandingPage /> */}
-    {/* <FilterComponent /> */}
-    <SingleResultPage />
+      <LandingPage />
+      {/* <FilterComponent /> */}
+      {/* <SingleResultPage /> */}
     </div>
   );
 }
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
-  console.log(session,'session');
-const isCookie = context.req.headers.cookie
-  if (!session && !isCookie) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: true,
-      },
-    };
-  }
-  return { props: {} };
-}
-
+// export async function getServerSideProps(context) {
+//   const session = await getSession(context);
+//   console.log(session, "session");
+//   // const isCookie = await getCookie('cookieToken');
+//   // const isCookie = context.req.headers['cookieToken']  ;
+//   const { cookieToken } = cookies(context)
+//   if (!session && !cookieToken) {
+//     return {
+//       redirect: {
+//         destination: "/login",
+//         permanent: false,
+//       },
+//     };
+//   }
+//   return { props: {} };
+// }

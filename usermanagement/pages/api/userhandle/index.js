@@ -8,6 +8,18 @@ export default async function UserHandler(req, res) {
   await mongoConnection();
   const { method } = req;
 
+  //phoneNumber verification
+
+  if(method === 'GET'){
+    const {phone} = req.query
+    console.log(phone,'phone');
+    const user = await userSchema.findOne({phone})
+    if(user){
+      return res.status(200).json(user)
+    }
+    return res.status(401).json({message:'user Not found'})
+  }
+
   //reseting Password------------
 
   if (method === "POST" && req.body.type === "resetPassword") {
@@ -66,6 +78,7 @@ export default async function UserHandler(req, res) {
 
       res.status(200).json(newUser);
     } catch (error) {
+      console.log(error,'error');
       res.status(401).json({ message: error });
     }
   }
