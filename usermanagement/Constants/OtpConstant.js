@@ -28,26 +28,21 @@ function OtpConstant({ open, setOpen, phone, setNewPassword, newPassword }) {
   };
 
   const handleSubmit = async () => {
-    console.log("otp handleOtp");
     try {
       setLoader(true);
       const verifiedUser = await otpVerification(phone, state.otp);
       if (verifiedUser) {
-        console.log("verification success");
         setLoader(false);
         if (newPassword === false) {
-          console.log("success");
           setNewPassword(true);
           return handleClose();
         }
         console.log("registering user success");
-        console.log(phone,'phone');
         await userVerification(phone);
         handleClose();
         router.push("/");
       }
     } catch (error) {
-      console.log(error, "eroooooooooooooooooooooooooooooooooorrr");
       setError(true);
       setLoader(false);
     }

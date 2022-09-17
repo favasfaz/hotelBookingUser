@@ -3,7 +3,6 @@ export default async function otpHandling(req, res) {
   const { method } = req;
   if (method == "GET") {
     const { otp } = req.query;
-    console.log(otp, "otp");
     const client = twilio(
       process.env.TWILIO_ACCOUNT_SID,
       process.env.TWILIO_AUTH_TOKEN
@@ -20,9 +19,7 @@ export default async function otpHandling(req, res) {
       });
   }
   if (method == "POST") {
-    console.log("verification");
     const { phone, otp } = req.body;
-    console.log(phone, "phone", otp, "otp");
 
     let client = twilio(
       process.env.TWILIO_ACCOUNT_SID,
@@ -36,7 +33,6 @@ export default async function otpHandling(req, res) {
         res.status(200).json({ message: "successfully registered" });
       })
       .catch((err) =>{
-        console.log(err,'verification errror');
          res.status(401).json({ message: "Enter valid OTP" })
         });
   }

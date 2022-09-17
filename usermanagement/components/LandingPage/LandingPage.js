@@ -19,7 +19,7 @@ function LandingPage() {
       {/* PopularIndianDestination */}
 
       {/* Footer */}
-      <Footer />
+      <Footer />    
     </div>
   );
 }

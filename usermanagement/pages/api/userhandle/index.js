@@ -2,7 +2,6 @@ import mongoConnection from "../../../util/config";
 import userSchema from "../../../modal/user-schema";
 import bcrypt from "bcrypt";
 import { creatingTokens } from "../../../authCreation/creatingToken";
-import { sendOtp } from "../../../APIs/Index";
 
 export default async function UserHandler(req, res) {
   await mongoConnection();
@@ -37,16 +36,18 @@ export default async function UserHandler(req, res) {
 
   if (method === "POST" && req.body.type === "login") {
     const { type, data } = req.body;
-    const user = await userSchema.findOne({ email: data.email });
+    let user = await userSchema.findOne({ email: data.email });
     try {
       if (user) {
         const result = await bcrypt.compare(data.password, user.password);
         if (!result) throw "incorrect password";
         const Tokens = creatingTokens({
+          id : user._id,
           email: user.email,
           phone: user.phone,
         });
-        return res.status(200).json(Tokens);
+        user = {email:user.email,name:user.name,phone:user.phone}
+        return res.status(200).json({Tokens,user});
       }
       throw "user Not found";
     } catch (error) {
@@ -57,10 +58,8 @@ export default async function UserHandler(req, res) {
   //userRegistration----------
 
   if (method === "POST" || req.body.type === "register") {
-    console.log(req.body.type, "type");
     try {
       if (req.body.type) {
-        console.log("register type");
         const phone = req.body.phone;
         await userSchema.findOneAndUpdate(
           { phone: phone },
@@ -74,11 +73,9 @@ export default async function UserHandler(req, res) {
       if (isUser) throw "user Already found";
       password = await bcrypt.hash(password, 10);
       const newUser = await userSchema.create({ password, email, phone, name });
-      console.log(newUser, "newUser");
 
       res.status(200).json(newUser);
     } catch (error) {
-      console.log(error,'error');
       res.status(401).json({ message: error });
     }
   }

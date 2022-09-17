@@ -6,7 +6,6 @@ import {
   ListItemText,
   Paper,
 } from "@mui/material";
-import GitHubIcon from "@mui/icons-material/GitHub";
 import GoogleIcon from "@mui/icons-material/Google";
 import { signIn } from "next-auth/react";
 

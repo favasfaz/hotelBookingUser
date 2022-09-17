@@ -1,24 +1,17 @@
-import { getSession } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
 import { deleteCookie, getCookie } from "cookies-next";
 import LandingPage from "../components/LandingPage/LandingPage";
-import SearchSection from "../components/FilterComponent/SearchSection/SearchSection";
-import FilterComponent from "../components/FilterComponent/FilterComponent";
-import SingleResultPage from "../components/SingleResultPage/SingleResultPage";
 import { useSession } from "next-auth/react";
-import cookies from 'next-cookies'
-
 
 export default function Home() {
   const { data: session } = useSession();
-  console.log(session?.user?.name);
-  const handleLogout = () => {
-    signOut();
-    deleteCookie("next-auth.session-token");
-    deleteCookie("userToken");
-  };
+  // const handleLogout = () => {
+  //   signOut();
+  //   deleteCookie("next-auth.session-token");
+  //   deleteCookie("userToken");
+  // };
   return (
     <div>
       <Head>

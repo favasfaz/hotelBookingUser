@@ -1,4 +1,5 @@
 import axios from "axios";
+import { deleteCookie, getCookie } from "cookies-next";
 
 //user Register
 export const userRegister = async (data) => {
@@ -11,8 +12,6 @@ export const userRegister = async (data) => {
 
 // User verified
 export const userVerification = async (data) => {
-  console.log("log apiindex");
-  console.log(data, "api index data");
   return await axios({
     url: "/api/userhandle",
     method: "post",
@@ -44,14 +43,12 @@ export const sendOtp = async (phone) => {
 //OTP verification
 export const otpVerification = async (phone, otp) => {
   let data = { phone, otp };
-  console.log(data, "datafrom index");
   return await axios.post("/api/userhandle/otp", data);
 };
 
 
 //resetPassword
 export const resetPassword = async (phone, password) => {
-  console.log("reset function working");
   let data = { phone, password };
   return await axios({
     url: "/api/userhandle",
@@ -65,6 +62,17 @@ export const resetPassword = async (phone, password) => {
 
 //phoneNumber verification
 export const numberVerification = async(phone) =>{
-  console.log('phone numver verification');
   return await axios.get(`/api/userhandle?phone=${phone}`);
+}
+
+//user Profile Edit
+export const profileEdit = async(data) =>{
+const token = getCookie('cookieToken')
+return await axios.put('/api/userhandle/profile',data,{headers:{authtoken:token}})
+}
+
+export const changePassword = async(datas) =>{
+  const token = getCookie('cookieToken')
+  const data = {type:'resetPassword',data:datas}
+return await axios.put('/api/userhandle/profile',data,{headers:{authtoken:token}})
 }

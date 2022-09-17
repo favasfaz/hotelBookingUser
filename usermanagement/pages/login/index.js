@@ -15,6 +15,7 @@ function index() {
       ) : (
         <Signup state={state} setState={setState} />
       )}
+      {/* <Profile /> */}
     </div>
   );
 }
@@ -22,6 +23,7 @@ function index() {
 export default index;
 
 export async function getServerSideProps(context) {
+  console.log('token');
   const session = await getSession(context);
   const { cookieToken } = cookies(context)
   if (session || cookieToken) {
