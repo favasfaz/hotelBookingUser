@@ -9,7 +9,6 @@ import { Avatar } from "@mui/material";
 function Header() {
   const router = useRouter();
   const users = useSelector((state) => state.users);
-  console.log(users.user.name);
   const { data: session } = useSession();
   const handleClick = () => {
     router.push("/login");
@@ -46,7 +45,7 @@ function Header() {
               </h2>
             )}
        
-          {!session && !users.user.name && <h2 className="cursor-pointer" onClick={()=>router.push('/login')}>SignIn</h2> }
+          {!session && !users.user.name && <h2 className="cursor-pointer" onClick={handleClick}>SignIn</h2> }
         </div>
       </div>
     </div>

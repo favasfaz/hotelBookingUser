@@ -1,5 +1,5 @@
 import axios from "axios";
-import { deleteCookie, getCookie } from "cookies-next";
+import { getCookie } from "cookies-next";
 
 //user Register
 export const userRegister = async (data) => {
@@ -71,8 +71,24 @@ const token = getCookie('cookieToken')
 return await axios.put('/api/userhandle/profile',data,{headers:{authtoken:token}})
 }
 
+//Resetting Password
 export const changePassword = async(datas) =>{
   const token = getCookie('cookieToken')
   const data = {type:'resetPassword',data:datas}
 return await axios.put('/api/userhandle/profile',data,{headers:{authtoken:token}})
+}
+
+//Category fetching
+export const AllCategories = async()=>{
+  return await axios.get('/api/categoryhandle')
+}
+
+//Hotel fetching
+export const FetchAllHotels = async()=>{
+  return await axios.get('/api/hotelhandle')
+}
+
+//room fetching
+export const  FetchAllRooms = async()=>{
+return await axios.get('/api/roomhandle')
 }

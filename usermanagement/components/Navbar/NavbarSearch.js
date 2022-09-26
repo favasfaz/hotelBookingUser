@@ -6,13 +6,27 @@ import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import Box from "@mui/material/Box";
 import SearchIcon from '@mui/icons-material/Search';
 import PeopleIcon from '@mui/icons-material/People';
+import {useRouter} from 'next/router'
+import { useForm } from 'react-hook-form';
 
-function NavbarSearch({ state }) {
-  const [value, setValue] = useState([]);
+
+function NavbarSearch({ state,query }) {
+  const { register, handleSubmit } = useForm({ shouldUseNativeValidation: true });
+
+  const router = useRouter()
+  const [date, setDate] = useState([]);
+
+
+  const onSubmit =async(data)=>{
+ const {destination,count} = data
+    router.push(`/search?date=${date}&&destination=${destination}&&count=${count}`)
+  }
+
   return (
     <div className="flex flex-col items-center mt-2 ">
-      <div
-        className={`flex flex-col sm:items-center   justify-center  bg-white rounded-lg shadow-2xl p-3 ${
+   <form onSubmit={handleSubmit(onSubmit)}>
+       <div
+        className={`flex flex-col sm:items-center justify-center  bg-white rounded-lg shadow-2xl p-3 ${
           state && "sm:flex-row "
         }`}
       >
@@ -20,6 +34,7 @@ function NavbarSearch({ state }) {
           <TextField
             id="filled-basic"
             label="Destination"
+            placeholder={query && query.destination }
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -27,6 +42,7 @@ function NavbarSearch({ state }) {
                 </InputAdornment>
               ),
             }}
+            {...register("destination", { required: "required field" })} // custom message
             variant="outlined"
             size="small"
           />
@@ -38,9 +54,9 @@ function NavbarSearch({ state }) {
             localeText={{ start: "Check-in", end: "Check-out" }}
           >
             <DateRangePicker
-              value={value}
+              value={date}
               onChange={(newValue) => {
-                setValue(newValue);
+                setDate(newValue);
               }}
               renderInput={(startProps, endProps) => (
                 <React.Fragment>
@@ -56,7 +72,8 @@ function NavbarSearch({ state }) {
         <div className={`${!state && "my-5"}`}>
           <TextField
             id="filled-basic"
-            label="1 adult - 1 Room"
+            label= "1 adult - 1 Room"
+            placeholder={query && query.count }
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -64,12 +81,16 @@ function NavbarSearch({ state }) {
                 </InputAdornment>
               ),
             }}
+            {...register("count", { required: "required field" })} // custom message
+            // value={count}
+            // onChange={(e)=>setCount(e.target.value)}
             variant="outlined"
             size="small"
           />
         </div>
-        <Button variant="outlined" >Search</Button>
+        <Button variant="outlined" type="submit" >Search</Button>
       </div>
+   </form>
     </div>
   );
 }

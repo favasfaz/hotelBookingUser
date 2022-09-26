@@ -15,7 +15,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UpdateUserProfile } from "../../Redux/AuthSlice";
 import { useDispatch } from "react-redux";
-import SingleSection from "./SingleSection";
 
 function Profile() {
   const { data: session } = useSession();
@@ -26,7 +25,7 @@ function Profile() {
   const [emailedit, setEmailEdit] = useState(true);
   const [phoneedit, setPhoneEdit] = useState(true);
   const dispatch = useDispatch();
-  const userData = Object.entries(user.user)
+  // const userData = Object.entries(user.user)
   const {
     register,
     handleSubmit,
@@ -57,7 +56,6 @@ function Profile() {
       await dispatch(UpdateUserProfile(datas));
       setNameEdit(true);
     } else if (datas.phone) {
-      console.log('phone');
       await dispatch(UpdateUserProfile(datas));
       setPhoneEdit(true);
     }
@@ -197,63 +195,57 @@ function Profile() {
             {/* Personal Information Display */}
             {personaltoggle && (
               <>
-              {
-                userData.map((v)=>(
-                  <SingleSection data={v} />
-                ))
-              }
-
-                <div className="w-full h-auto px-6 py-5 mt-6 overflow-hidden bg-stone-50  sm:max-w-lg sm:rounded-lg mx-auto">
-                  <form onSubmit={handleSubmit2(onSubmit)} method="post">
-                    <div className="mt-4 space-y-3">
+               <div className="w-full h-auto px-6 py-5 mt-6 overflow-hidden bg-stone-50  sm:max-w-lg sm:rounded-lg mx-auto">
+                  <form method="post" onSubmit={handleSubmit(onSubmit)}>
+                    <div className="space-y-3">
                       <div className="flex place-content-between">
                         <label
-                          htmlFor="email"
+                          htmlFor="name"
                           className="block text-sm font-medium text-gray-700 undefined"
                         >
-                          Email :
+                          Name :
                         </label>
-                        {/* {session?.user?.email || user?.user?.email ?
-                          < button className='px-4 py-1 bg-blue-900 text-white rounded-lg font-semibold' onClick={handleEmailVerify}>Verify</button>
-                        : ''}  */}
-                        {emailedit && (
+
+                        {nameedit && (
                           <EditIcon
                             className="w-5 h-5 cursor-pointer"
-                            onClick={handleEmailEdit}
+                            onClick={handleNameEdit}
                           />
                         )}
                       </div>
-
                       <div className="flex flex-col items-start">
                         <input
-                          type="email"
-                          name="email"
-                          readOnly={emailedit ? true : false}
+                          type="text"
+                          name="name"
+                          readOnly={nameedit ? true : false}
                           defaultValue={
-                            session?.user?.name || user?.user?.email
-                              ? session?.user.email || user?.user.email
+                            session?.user?.name || user?.user?.name
+                              ? session?.user?.name || user?.user?.name
                               : ""
                           }
                           className={
-                            emailedit
-                              ? "block w-full h-10 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-blue-900 outline-none focus:ring-opacity-50 p-5 bg-white cursor-not-allowed"
-                              : "block w-full h-10 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-blue-900 outline-none focus:ring-opacity-50 p-5 bg-white"
+                            nameedit
+                              ? "block w-full h-10 mt-1 border-gray-800 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-blue-900 outline-none focus:ring-opacity-50  p-5 cursor-not-allowed"
+                              : "block w-full h-10 mt-1 border-gray-800 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-blue-900 outline-none focus:ring-opacity-50  p-5"
                           }
-                          {...register2("email", {
-                            required: "Email is required",
+                          {...register("name", {
+                            required: "Name is required",
+                            maxLength: {
+                              value: 10,
+                              message:
+                                "Name cannot exceed more than 10 characters",
+                            },
                             pattern: {
-                              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                              message: "Enter valid email",
+                              value: /^[A-Za-z]+$/i,
+                              message: "Enter valid Name",
                             },
                           })}
                         />
-                        {errors2.email && (
-                          <p style={{ color: "red" }}>
-                            {errors2.email.message}
-                          </p>
+                        {errors.name && (
+                          <p style={{ color: "red" }}>{errors.name.message}</p>
                         )}
                       </div>
-                      {!emailedit && (
+                      {!nameedit && (
                         <div className="flex place-content-end space-x-3">
                           <button
                             type="submit"
@@ -263,7 +255,7 @@ function Profile() {
                           </button>
                           <button
                             className="bg-red-600 px-4 py-1 font-semibold text-white rounded-md"
-                            onClick={handleEmailCancel}
+                            onClick={handleNameCancel}
                           >
                             Cancel
                           </button>
@@ -272,75 +264,145 @@ function Profile() {
                     </div>
                   </form>
                 </div>
-                <div className="w-full h-auto px-6 py-5  mt-6 overflow-hidden bg-stone-50  sm:max-w-lg sm:rounded-lg mx-auto">
-                  <form onSubmit={handleSubmit3(onSubmit)} method="post">
-                    <div className="mt-4 space-y-3">
-                      <div className="flex place-content-between">
-                        <label
-                          htmlFor="phone"
-                          className="block text-sm font-medium text-gray-700 undefined"
-                        >
-                          Phone :
-                        </label>
-                        {/* {session?.user?.name || user?.user?.email ?
-                          <button className='px-4 py-1 bg-blue-900 text-white rounded-lg font-semibold'>Verify</button>
-                        :''}  */}
-                        {phoneedit && (
-                          <EditIcon
-                            className="w-5 h-5 cursor-pointer"
-                            onClick={handlePhoneEdit}
-                          />
-                        )}
-                      </div>
+              
+<div className="w-full h-auto px-6 py-5 mt-6 overflow-hidden bg-stone-50  sm:max-w-lg sm:rounded-lg mx-auto">
+<form onSubmit={handleSubmit2(onSubmit)} method="post">
+  <div className="mt-4 space-y-3">
+    <div className="flex place-content-between">
+      <label
+        htmlFor="email"
+        className="block text-sm font-medium text-gray-700 undefined"
+      >
+        Email :
+      </label>
+      {/* {session?.user?.email || user?.user?.email ?
+        < button className='px-4 py-1 bg-blue-900 text-white rounded-lg font-semibold' onClick={handleEmailVerify}>Verify</button>
+      : ''}  */}
+      {emailedit && (
+        <EditIcon
+          className="w-5 h-5 cursor-pointer"
+          onClick={handleEmailEdit}
+        />
+      )}
+    </div>
 
-                      <div className="flex flex-col items-start">
-                        <input
-                          type="number"
-                          name="phone"
-                          readOnly={phoneedit ? true : false}
-                          defaultValue={
-                            session?.user?.phone || user?.user?.phone
-                              ? session?.user.phone || user.user.phone
-                              : ""
-                          }
-                          className={
-                            phoneedit
-                              ? "block w-full h-10 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-blue-900 outline-none focus:ring-opacity-50  p-5 cursor-not-allowed"
-                              : "block w-full h-10 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-blue-900 outline-none focus:ring-opacity-50  p-5 "
-                          }
-                          {...register3("phone", {
-                            required: "Phone Number is required",
-                            pattern: {
-                              value: /^(0|[1-9]\d*)(\.\d+)?$/,
-                              message: "Enter valid phone number",
-                            },
-                          })}
-                        />
-                        {errors3.phone && (
-                          <p style={{ color: "red" }}>
-                            {errors3.phone.message}
-                          </p>
-                        )}
-                      </div>
-                      {!phoneedit && (
-                        <div className="flex place-content-end space-x-3">
-                          <button
-                            type="submit"
-                            className="bg-blue-900 px-4 py-1 font-semibold text-white rounded-md"
-                          >
-                            Save
-                          </button>
-                          <button
-                            className="bg-red-600 px-4 py-1 font-semibold text-white rounded-md"
-                            onClick={handlePhoneCancel}
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </form>
-                </div>
+    <div className="flex flex-col items-start">
+      <input
+        type="email"
+        name="email"
+        readOnly={emailedit ? true : false}
+        defaultValue={
+          session?.user?.name || user?.user?.email
+            ? session?.user.email || user?.user.email
+            : ""
+        }
+        className={
+          emailedit
+            ? "block w-full h-10 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-blue-900 outline-none focus:ring-opacity-50 p-5 bg-white cursor-not-allowed"
+            : "block w-full h-10 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-blue-900 outline-none focus:ring-opacity-50 p-5 bg-white"
+        }
+        {...register2("email", {
+          required: "Email is required",
+          pattern: {
+            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+            message: "Enter valid email",
+          },
+        })}
+      />
+      {errors2.email && (
+        <p style={{ color: "red" }}>
+          {errors2.email.message}
+        </p>
+      )}
+    </div>
+    {!emailedit && (
+      <div className="flex place-content-end space-x-3">
+        <button
+          type="submit"
+          className="bg-blue-900 px-4 py-1 font-semibold text-white rounded-md"
+        >
+          Save
+        </button>
+        <button
+          className="bg-red-600 px-4 py-1 font-semibold text-white rounded-md"
+          onClick={handleEmailCancel}
+        >
+          Cancel
+        </button>
+      </div>
+    )}
+  </div>
+</form>
+</div>
+<div className="w-full h-auto px-6 py-5  mt-6 overflow-hidden bg-stone-50  sm:max-w-lg sm:rounded-lg mx-auto">
+<form onSubmit={handleSubmit3(onSubmit)} method="post">
+  <div className="mt-4 space-y-3">
+    <div className="flex place-content-between">
+      <label
+        htmlFor="phone"
+        className="block text-sm font-medium text-gray-700 undefined"
+      >
+        Phone :
+      </label>
+      {/* {session?.user?.name || user?.user?.email ?
+        <button className='px-4 py-1 bg-blue-900 text-white rounded-lg font-semibold'>Verify</button>
+      :''}  */}
+      {phoneedit && (
+        <EditIcon
+          className="w-5 h-5 cursor-pointer"
+          onClick={handlePhoneEdit}
+        />
+      )}
+    </div>
+
+    <div className="flex flex-col items-start">
+      <input
+        type="number"
+        name="phone"
+        readOnly={phoneedit ? true : false}
+        defaultValue={
+          session?.user?.phone || user?.user?.phone
+            ? session?.user.phone || user.user.phone
+            : ""
+        }
+        className={
+          phoneedit
+            ? "block w-full h-10 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-blue-900 outline-none focus:ring-opacity-50  p-5 cursor-not-allowed"
+            : "block w-full h-10 mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-blue-900 outline-none focus:ring-opacity-50  p-5 "
+        }
+        {...register3("phone", {
+          required: "Phone Number is required",
+          pattern: {
+            value: /^(0|[1-9]\d*)(\.\d+)?$/,
+            message: "Enter valid phone number",
+          },
+        })}
+      />
+      {errors3.phone && (
+        <p style={{ color: "red" }}>
+          {errors3.phone.message}
+        </p>
+      )}
+    </div>
+    {!phoneedit && (
+      <div className="flex place-content-end space-x-3">
+        <button
+          type="submit"
+          className="bg-blue-900 px-4 py-1 font-semibold text-white rounded-md"
+        >
+          Save
+        </button>
+        <button
+          className="bg-red-600 px-4 py-1 font-semibold text-white rounded-md"
+          onClick={handlePhoneCancel}
+        >
+          Cancel
+        </button>
+      </div>
+    )}
+  </div>
+</form>
+</div>
               </>
             )}
 

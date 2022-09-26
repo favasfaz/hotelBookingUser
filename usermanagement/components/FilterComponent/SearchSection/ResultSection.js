@@ -13,11 +13,11 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import Image from "next/image";
 
-function ResultSection() {
+function ResultSection({data}) {
   return (
-    <div className="sm:w-3/5 bg-white shadow-lg p-6">
-      <h4 className="text-2xl">India: 19,570 properties found</h4>
-      <div>
+    <div className="sm:w-3/5 bg-white shadow-lg p-0 sm:p-6">
+      <h4 className="text-2xl"> {data.length} properties found</h4>
+      {/* <div>
         <FormControl className="w-56">
           <InputLabel id="language-label">Category</InputLabel>
           <Select size="mediam" labelId="language-label" id="language" value="">
@@ -26,22 +26,26 @@ function ResultSection() {
             <MenuItem value={"ru"}>Russian</MenuItem>
           </Select>
         </FormControl>
-      </div>
+      </div> */}
 
-      <Card elevation={10} className="flex justify-between my-3 ">
-        <div className="w-44">
+      {data && data.length >0 ?<Card elevation={10} className="flex-col my-3">
+        {
+          data.map((v)=>(
+            <div className="flex items-center justify-between">
+<div className="w-44 my-2">
           <Image
-            layout="responsive"
-            src="/zayn.jpeg"
+            layout="fixed"
+            src={v.imageUrls[0]}
             className="rounded-lg"
-            height={500}
-            width={500}
+            height="200"
+            width="200"
+            alt="categoryImage"
           />
         </div>
-          <div className="sm:mr-auto m-3">
-            <h2>Hotel Name</h2>
-            <p>place</p>
-            <h4>description</h4>
+          <div className="mr-auto ml-10">
+            <h2>{v.name}</h2>
+            <p>{v.city}</p>
+            <h4>{v.phone}</h4>
           </div>
           <div className="mt-3">
             <h2>Review Score</h2>
@@ -50,9 +54,12 @@ function ResultSection() {
               View
             </Button>
           </div>
+          </div>
+          ))
+        }
 
-      </Card>
-      <Card elevation={10} className=" flex justify-between">
+      </Card>:<h1 className="mt-14 text-red-900 font-bold">No data found</h1>}
+      {/* <Card elevation={10} className=" flex justify-between">
       <CardActionArea className="w-52">
       <Image
             layout="responsive"
@@ -76,7 +83,7 @@ function ResultSection() {
             Lizard
           </Typography>
         </CardContent>
-    </Card>
+    </Card> */}
     </div>
   );
 }

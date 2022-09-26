@@ -1,8 +1,7 @@
-import { getSession, providers } from "next-auth/react";
-import React, { useEffect, useState } from "react";
+import { getSession } from "next-auth/react";
+import React, { useState } from "react";
 import Login from "../../components/Login/Login";
 import Signup from "../../components/SignUP/Signup";
-import { deleteCookie, getCookie } from "cookies-next";
 import cookies from 'next-cookies'
 
 
@@ -23,7 +22,6 @@ function index() {
 export default index;
 
 export async function getServerSideProps(context) {
-  console.log('token');
   const session = await getSession(context);
   const { cookieToken } = cookies(context)
   if (session || cookieToken) {

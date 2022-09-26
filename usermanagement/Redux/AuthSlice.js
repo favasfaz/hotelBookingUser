@@ -22,7 +22,6 @@ const initialState = {
 export const UpdateUserProfile = createAsyncThunk('users/UpdateUserProfile',async(data,{ rejectWithValue })=>{
     try {
      const user =  await profileEdit(data)
-     console.log(user.data);
      return user.data
     } catch (error) {  
     throw  rejectWithValue(error.response.data.message)

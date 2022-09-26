@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import { creatingTokens } from "../../../authCreation/creatingToken";
 
 export default async function UserHandler(req, res) {
-  await mongoConnection();
+  // await mongoConnection();
   const { method } = req;
 
   //phoneNumber verification
