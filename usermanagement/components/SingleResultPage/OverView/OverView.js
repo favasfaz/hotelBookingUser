@@ -1,15 +1,15 @@
 import React from 'react'
 
-function OverView() {
+function OverView({name,discription,phone,location,distance}) {
   return (
-    <div className='flex w-auto justify-center '>
+    <div className='flex w-6/6 sm:w-3/6 justify-start '>
         <div className='p-3'>
-            <h2 className='font-semibold text-xl'>About Sobit Sarovar Portico</h2>
-          <div className='w-full'> With Sobit Sarovar Portico, your Goa trip just got better! Wake up to a beautiful pool view, and take a walk at the Golden Beach which is just 500 m from the property.</div>
-        <ul className='list-disc'>
-          <li>The hotel features an outdoor swimming pool to relax and unwind.</li>
-          <li>The hotel features an outdoor swimming pool to relax and unwind.</li>
-          <li>The hotel features an outdoor swimming pool to relax and unwind.</li>
+            <h2 className='font-semibold text-black text-xl'>About {name}</h2>
+          <div className='w-full mt-1'>{discription}</div>
+          <div className='w-full mt-2'>{distance}</div>
+        <ul className='list-disc mt-1'>
+          <li >phone : {phone}</li>
+          <li className='font-bold'>location : {location}</li>
         </ul>
         </div>
     </div>

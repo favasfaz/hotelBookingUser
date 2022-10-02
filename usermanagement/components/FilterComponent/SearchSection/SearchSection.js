@@ -2,25 +2,17 @@ import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 import React, { useState } from "react";
 import NavbarSearch from "../../Navbar/NavbarSearch";
 import { useSelector } from "react-redux";
+import {useRouter} from 'next/router'
+
+
 
 function SearchSection({ query }) {
+  const [loader,setLoader]= useState(true)
+  const router = useRouter()
   let data = useSelector((state) => state.category);
-  const hotels = useSelector(state => state.hotel.hotels)
-  const [filter, setFilter] = useState([]);
   data = data.categories.filter((v, i) => i < 4);
-
-  const handleChange = (e) => {
-    const ifExist = filter.indexOf(e.target.value)
-    if(ifExist !== -1){
-      filter.splice(ifExist,1)
-    }
-    else{
-      setFilter(prev =>[...prev,e.target.value]);
-    }
-    const filteredData = filter.map(v=>{
-     return hotels.map(hotel=>v ==hotel.category )
-    })
-    console.log(filteredData,'data after filter');
+  const handleChange = async(e) => {
+    router.push(`/search?filterBy=${e.target.value}&&destination=${query.destination}`)
   };
 
   return (
@@ -32,7 +24,7 @@ function SearchSection({ query }) {
       <div className="font-mono">
         <div className="bg-slate-200 border-b-2 border-blue-900 text-slate-600 p-3 mt-3">
           <h2 className="underline my-3 font-medium text-black ">Filter by:</h2>
-          {data.map((v, i) => {
+          {data .map((v, i) => {
             return (
               <div className="border  flex items-center justify-between">
                 <FormGroup>
@@ -48,40 +40,6 @@ function SearchSection({ query }) {
           })}
         </div>
       </div>
-      {/* <div className="font-mono">
-        <div className="bg-slate-200 border-b-2 hidden sm:block border-blue-900  text-slate-600 p-3 ">
-          <h2 className="underline my-3 text-black font-medium">
-            Popular filters
-          </h2>
-          <div className="border  flex items-center justify-between">
-            <FormGroup>
-              <FormControlLabel
-                control={<Checkbox size="small" />}
-                label="Resorts"
-              />
-            </FormGroup>
-            <p>123</p>
-          </div>
-          <div className="border  flex items-center justify-between">
-            <FormGroup>
-              <FormControlLabel
-                control={<Checkbox size="small" />}
-                label="Homestays"
-              />
-            </FormGroup>
-            <p>123</p>
-          </div>
-          <div className="border  flex items-center justify-between">
-            <FormGroup>
-              <FormControlLabel
-                control={<Checkbox size="small" />}
-                label="Hotels"
-              />
-            </FormGroup>
-            <p>123</p>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 }

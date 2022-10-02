@@ -8,11 +8,6 @@ import Sample from "../sample";
 
 export default function Home() {
   const { data: session } = useSession();
-  // const handleLogout = () => {
-  //   signOut();
-  //   deleteCookie("next-auth.session-token");
-  //   deleteCookie("userToken");
-  // };
   return (
     <div>
       <Head>
@@ -21,6 +16,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <LandingPage />
+      {/* <Sample /> */}
     </div>
   );
 }

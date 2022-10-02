@@ -3,19 +3,25 @@ import {FetchAllHotels} from '../APIs/Index'
 const initialState = {
   loading: false,
   hotels: [],
+  filterHotels :[],
   error: "",
 };
 
 export const FetchHotels = createAsyncThunk("hotels/FetchHotels", async () => {
-    console.log('beforeslice')
     const res = await FetchAllHotels()
-    console.log('slice')
   return res.data
 });
 
 export const hotelSlice = createSlice({
   name: "hotels",
   initialState,
+  reducers:{
+    filterHotel:(state,action)=>{
+        state.filterHotels = action.payload.map(v=>{
+         return  state.hotels.filter(hotel=>v ==hotel.category )
+         })
+    }
+},
   extraReducers: (builder) => {
     builder.addCase(FetchHotels.pending, (state) => {
       state.loading = true;
@@ -34,3 +40,4 @@ export const hotelSlice = createSlice({
 });
 
 export default hotelSlice.reducer;
+export const {filterHotel} = hotelSlice.actions

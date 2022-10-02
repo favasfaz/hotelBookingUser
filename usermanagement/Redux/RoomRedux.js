@@ -7,12 +7,11 @@ const initialState = {
 }
 
 export const FetchRooms = createAsyncThunk('rooms/FetchRooms',async()=>{
-    console.log('rroms');
     const res = await FetchAllRooms()
     return res.data 
  })
 
- const roomSlice = createSlice({
+ export const roomSlice = createSlice({
     name:'rooms',
     initialState,
     extraReducers:(builder)=>{
