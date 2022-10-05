@@ -10,13 +10,18 @@ function Rooms({ rooms }) {
   const router = useRouter()
   const allRooms = useSelector((state) => state.rooms.rooms);
   const roomsInHotel = allRooms.filter((room) => rooms.includes(room._id));
-
+  
   useEffect(() => {
     dispatch(FetchRooms());
   }, []);
 
   const handleClick = (id) =>{
     router.push(`/roomSearch/${id}`)
+  }
+
+  const handlePush = async(id) =>{
+    console.log(id);
+    router.push('/checkout')
   }
 
   return (
@@ -37,19 +42,26 @@ function Rooms({ rooms }) {
             alt="categoryImage"
             objectFit="contain"
           />
-           <div className="flex-col flex">
-                <Button
-                  size="small"
-                  variant="outlined"
-                >
-                 Check Availability
-                </Button>
+          <div className="flex justify-center">
+            <h4 className="truncate">{v.title}</h4>
+          </div>
+          <div className="flex justify-center ">
+            <h4 className="font-bold">${v.price}</h4>
+          </div>
+           <div className="flex-col flex ">
                 <Button
                   size="small"
                   variant="outlined"
                   onClick={()=>handleClick(v._id)}
                 >
                   Deteils
+                </Button>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  onClick={()=>handlePush(v._id)}
+                >
+                 Reserve
                 </Button>
               </div>
         </div>

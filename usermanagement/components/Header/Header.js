@@ -10,6 +10,7 @@ function Header() {
   const router = useRouter();
   const users = useSelector((state) => state.users);
   const { data: session } = useSession();
+  console.log(session?.user?.name,'session');
   const handleClick = () => {
     router.push("/login");
   };
@@ -39,11 +40,23 @@ function Header() {
             alt="Remy Sharp"
             src={session?.user?.image}
           />
-            {session || users.user && (
+            {/* {session?.user?.name || users.user && (
               <h2 className="cursor-pointer ml-1" onClick={handleProfile}>
                 {session?.user?.name || users?.user.name}
               </h2>
+            )} */}
+            {session?.user?.name && (
+              <h2 className="cursor-pointer ml-1" onClick={handleProfile}>
+              {session?.user?.name}
+            </h2>
             )}
+            {
+              users.user &&(
+                <h2 className="cursor-pointer ml-1" onClick={handleProfile}>
+                {users?.user.name}
+              </h2>
+              )
+            }
        
           {!session && !users.user.name && <h2 className="cursor-pointer" onClick={handleClick}>SignIn</h2> }
         </div>

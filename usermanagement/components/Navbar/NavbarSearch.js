@@ -15,13 +15,14 @@ function NavbarSearch({ state,query }) {
 
   const router = useRouter()
   const [date, setDate] = useState([]);
-
-
+// console.log(query,'query');
+//  let dates = query?.date?.split()
+// console.log(dates[0]);
   const onSubmit =async(data)=>{
  const {destination,count} = data
     router.push(`/search?date=${date}&&destination=${destination}&&count=${count}`)
   }
-
+  
   return (
     <div className="flex flex-col items-center mt-2 ">
    <form onSubmit={handleSubmit(onSubmit)}>
@@ -60,9 +61,9 @@ function NavbarSearch({ state,query }) {
               }}
               renderInput={(startProps, endProps) => (
                 <React.Fragment>
-                  <TextField {...startProps} size="small" />
+                  <TextField  {...startProps} size="small" />
                   <Box sx={{ mx: 2 }}> to </Box>
-                  <TextField {...endProps} size="small" />
+                  <TextField  {...endProps} size="small" />
                 </React.Fragment>
               )}
             />

@@ -38,7 +38,7 @@ function ResultSection({ data }) {
                 <div className="mr-auto ml-2 sm:ml-5 w-1/2">
                   <h2 className="text-blue-900 font-bold text-lg">{v.name}</h2>
                   <p className="mt-1 font-bold">{v.city}</p>
-                  <h4 className="text-sm truncate lg:whitespace-normal break-all">
+                  <h4 className="text-sm max-h-24 truncate lg:whitespace-normal break-all">
                     {v.discription}
                   </h4>
                 </div>

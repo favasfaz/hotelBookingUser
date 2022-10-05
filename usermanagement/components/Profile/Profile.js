@@ -15,8 +15,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UpdateUserProfile } from "../../Redux/AuthSlice";
 import { useDispatch } from "react-redux";
+import Header from '../Header/Header'
+import { useRouter } from "next/router";
 
 function Profile() {
+  const router = useRouter()
   const { data: session } = useSession();
   const user = useSelector((state) => state.users);
   const [personaltoggle, setPersonalToggle] = useState(true);
@@ -64,7 +67,8 @@ function Profile() {
   const handleLogout = () => {
     signOut();
     deleteCookie("next-auth.session-token");
-    deleteCookie("userToken");
+    deleteCookie("cookieToken");
+    router.push('/login')
   };
   const handleChangePassword = () => {
     setPasswordToggle(true);
@@ -114,6 +118,7 @@ function Profile() {
 
   return (
     <>
+    <Header />
       <div className="container  w-full h-auto flex flex-col md:flex-row px-2 md:px-12 py-5 bg-gray-50 relative">
         <div className="sidebar w-full md:w-[30%] h-full flex flex-col  ">
           <div className="namebox w-full h-24  flex items-center px-8 shadow-md rounded-md bg-white">

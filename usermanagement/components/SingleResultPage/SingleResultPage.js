@@ -3,10 +3,28 @@ import Image from "next/image";
 import OverView from "./OverView/OverView";
 import "react-toastify/dist/ReactToastify.css";
 import Rooms from "./Rooms/Rooms";
-
+import { useForm } from 'react-hook-form';
+import { Button, InputAdornment, TextField } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers-pro";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+import Box from "@mui/material/Box";
+import PeopleIcon from '@mui/icons-material/People';
+import { useDispatch, useSelector } from "react-redux";
+import {FetchRooms} from '../../Redux/RoomRedux'
 function SingleResultPage({ data }) {
+  const dispatch = useDispatch();
+  const obj = { ...data };
+
   const [overView, setOverView] = useState(true);
   const [rooms, setRooms] = useState(false);
+  const [date, setDate] = useState([]);
+
+  const allRooms = useSelector((state) => state.rooms.rooms);
+  const roomsInHotel = allRooms.filter((room) => obj[0]?.rooms.includes(room._id));
+
+  console.log(roomsInHotel);
+  const { register, handleSubmit } = useForm({ shouldUseNativeValidation: true });
 
   const handleClick = (v) => {
     if (v == 1) {
@@ -18,7 +36,21 @@ function SingleResultPage({ data }) {
       setRooms(true);
     }
   };
-  const obj = { ...data };
+
+  useEffect(() => {
+    dispatch(FetchRooms());
+  }, []);
+
+  const res = []
+  const onSubmit =async(data)=>{
+date.forEach(d => {
+  roomsInHotel?.isNotAvailable?.forEach(a => {
+    if (!(d[0] >= a) && (d[1] <= a)){
+      res.push(a._id)
+    }
+  })
+})
+     }
   return (
     <div className=" flex flex-col  sm:items-center xs:w-full sm:w-6/6">
       <div className="flex w-full sm:w-3/5">
@@ -70,6 +102,55 @@ function SingleResultPage({ data }) {
          
         </div>
       </div>
+      <div className="flex w-full mt-2 sm:w-3/5 justify-center">
+      <form onSubmit={handleSubmit(onSubmit)}>
+       <div
+        className="flex flex-col sm:flex-row sm:items-center justify-center w-full bg-white rounded-lg shadow-2xl p-3 "
+      >
+         <div className="my-2">
+          <LocalizationProvider
+            dateAdapter={AdapterMoment}
+            localeText={{ start: "Check-in", end: "Check-out" }}
+          >
+            <DateRangePicker
+              value={date}
+              onChange={(newValue) => {
+                setDate(newValue);
+              }}
+              renderInput={(startProps, endProps) => (
+                <React.Fragment>
+                  <TextField {...startProps} size="small" />
+                  <Box sx={{ mx: 2 }}> to </Box>
+                  <TextField {...endProps} size="small" />
+                </React.Fragment>
+              )}
+            />
+          </LocalizationProvider>
+        </div>
+
+        <div >
+          <TextField
+            id="filled-basic"
+            label= "2 adult - 1 Room"
+            // placeholder={query && query.count }
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <PeopleIcon />
+                </InputAdornment>
+              ),
+            }}
+            {...register("count", { required: "required field" })} // custom message
+            // value={count}
+            // onChange={(e)=>setCount(e.target.value)}
+            variant="outlined"
+            size="small"
+          />
+        </div>
+        <Button variant="outlined" type="submit" >Change</Button>
+      </div>
+   </form>
+      </div>
 
       {/* information */}
       <div className="flex gap-3 text-blue-900 md:gap-5 w-5/6 sm:w-3/6 justify-start m-4 font-bold ">
@@ -98,7 +179,7 @@ function SingleResultPage({ data }) {
         />
       )}
       {/* Rooms */}
-      {rooms && <Rooms rooms={obj[0]?.rooms} />}
+      {rooms && <Rooms rooms={res.length == 0 ? obj[0]?.rooms : res} />}
       {/* Location */}
 
       {/* Amenties */}
